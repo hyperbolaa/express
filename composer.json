@@ -1,0 +1,27 @@
+{
+  "name": "hyperbolaa/express",
+  "type": "express",
+  "description": "express about shunfeng and ucs",
+  "keywords": ["shunfeng", "ucs"],
+  "homepage": "https://github.com/hyperbolaa/express",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "chong yu",
+      "email": "chongyu366@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+  },
+  "autoload": {
+    "psr-4": {
+      "Hyperbolaa\\Express\\": ""
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.0.x-dev"
+    }
+  }
+}
