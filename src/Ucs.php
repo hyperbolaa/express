@@ -12,8 +12,8 @@ class Ucs
 
     private $url = "http://order.api.ucsus.com/ucsusapi20/service/v2/trackShipment/xml/";
 
-    private $storeLogin = "iherbcom";                                //账号由ucs提供
-    private $token      = "e904d9c5-788a-4340-ba1e-31ed4d2c82c2";    //密钥由ucs提供
+    private $storeLogin = "888888";                                //账号由ucs提供
+    private $token      = "******";                                 //密钥由ucs提供
     private $carrier    = "UCSUS";                                   //载体
 
 
