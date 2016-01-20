@@ -1,41 +1,61 @@
 <?php
+/**
+ * 合众速递的查询出口
+ */
+namespace Hyperbolaa\Express\src;
+use Hyperbolaa\Express\lib\Curl;
+use Hyperbolaa\Express\lib\Xml;
 
-namespace CT\Wxpay\src;
 
-use CT\Wxpay\lib\WxCurl;
-
-class Sf
+class Ucs
 {
-    private $appId = "wxbc509be2ea937a0d";
-    private $appSecret = "5a2ed94eb1a3452d55996b490776af6f";
+
+    private $url = "http://order.api.ucsus.com/ucsusapi20/service/v2/trackShipment/xml/";
+
+    private $storeLogin = "iherbcom";                                //账号由ucs提供
+    private $token      = "e904d9c5-788a-4340-ba1e-31ed4d2c82c2";    //密钥由ucs提供
+    private $carrier    = "UCSUS";                                   //载体
 
 
-    public function getSignPackage()
+    /**
+     * 快递的查询
+     * @param string $trackNumber
+     * @return array
+     */
+    public function query($trackNumber = 'TX901100035US')
     {
-        $jsapiTicket = $this->getJsApiTicket();
+        $curl = new Curl();
+        $xml  = new Xml();
+        $data = $this->buildXml($trackNumber);
+        $request_xml  = $xml->build($data);
+        $response_xml = $curl->post($this->url,$request_xml);
+        $response_arr = $xml->parse($response_xml);
 
-        // 注意 URL 一定要动态获取，不能 hardcode.
-        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-        $url = "$protocol$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-
-        $timestamp = time();
-        $nonceStr = $this->createNonceStr();
-
-        // 这里参数的顺序要按照 key 值 ASCII 码升序排序
-        $string = "jsapi_ticket=$jsapiTicket&noncestr=$nonceStr&timestamp=$timestamp&url=$url";
-
-        $signature = sha1($string);
-
-        $signPackage = array(
-            "appId" => $this->appId,
-            "nonceStr" => $nonceStr,
-            "timestamp" => $timestamp,
-            "url" => $url,
-            "signature" => $signature,
-            "rawString" => $string
-        );
-        return $signPackage;
+        return $response_arr;
     }
+
+
+    /**
+     * 构造请求数据
+     * $trackNumber  为字符串时候  构造为数组
+     * $trackNumber  为数组的时候  为默认值
+     * $trackNumber  格式 ["xxxxxxxxxx","ddddddddddd"]
+     */
+    private function buildXml($trackNumber){
+        if(!is_array($trackNumber)){
+            $trackNumber = [$trackNumber];
+        }
+        $data = [
+            "StoreLogin" => $this->storeLogin,
+            'Token'      => $this->token,
+            'Carrier'    => $this->carrier,
+            'TrackNumberList' => $trackNumber
+        ];
+        return $data;
+    }
+
+
+
 
 
 

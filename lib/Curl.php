@@ -1,65 +1,71 @@
 <?php
-
-namespace CT\Wxpay\lib;
-
-use CT\Wxpay\lib\WxPayDataBase;
-
 /**
- *
- * 回调基础类
- * @author widyhu
- *
+ * 一般的模拟请求类
+ * author:yuchong
+ * time:20160119
  */
-class WxPayNotifyReply extends  WxPayDataBase
-{
-    /**
-     *
-     * 设置错误码 FAIL 或者 SUCCESS
-     * @param string
-     */
-    public function SetReturn_code($return_code)
-    {
-        $this->values['return_code'] = $return_code;
+namespace Hyperbolaa\Express\lib;
+
+
+class Curl {
+    var $headers;
+    var $user_agent;
+    var $compression;
+
+    function __construct($compression='gzip') {
+        $this->headers[]    = 'Accept: image/gif, image/x-bitmap, image/jpeg, image/pjpeg';
+        $this->headers[]    = 'Connection: Keep-Alive';
+        $this->headers[]    = 'Content-type: application/x-www-form-urlencoded;charset=UTF-8';
+        $this->user_agent   = 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1; .NET CLR 1.0.3705; .NET CLR 1.1.4322; Media Center PC 4.0)';
+        $this->compression  = $compression;
     }
 
     /**
-     *
-     * 获取错误码 FAIL 或者 SUCCESS
-     * @return string $return_code
+     * @param $url
+     * @return mixed
      */
-    public function GetReturn_code()
-    {
-        return $this->values['return_code'];
+    function get($url) {
+        $process = curl_init($url);
+        curl_setopt($process, CURLOPT_HTTPHEADER, $this->headers);
+        curl_setopt($process, CURLOPT_HEADER, 0);
+        curl_setopt($process, CURLOPT_USERAGENT, $this->user_agent);
+
+        curl_setopt($process, CURLOPT_SSL_VERIFYPEER, false); //不验证证书
+        curl_setopt($process, CURLOPT_SSL_VERIFYHOST, false); //不验证证书
+
+        curl_setopt($process,CURLOPT_ENCODING , $this->compression);
+        curl_setopt($process, CURLOPT_TIMEOUT, 30);
+        curl_setopt($process, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($process, CURLOPT_FOLLOWLOCATION, 1);
+        $return = curl_exec($process);
+        curl_close($process);
+        return $return;
     }
 
     /**
-     *
-     * 设置错误信息
-     * @param string $return_code
+     * @param $url
+     * @param $data
+     * @return mixed
      */
-    public function SetReturn_msg($return_msg)
-    {
-        $this->values['return_msg'] = $return_msg;
+    function post($url,$data) {
+        $process = curl_init($url);
+        curl_setopt($process, CURLOPT_HTTPHEADER, $this->headers);
+        curl_setopt($process, CURLOPT_HEADER, 0);
+        curl_setopt($process, CURLOPT_USERAGENT, $this->user_agent);
+
+        curl_setopt($process, CURLOPT_SSL_VERIFYPEER, false); //不验证证书
+        curl_setopt($process, CURLOPT_SSL_VERIFYHOST, false); //不验证证书
+
+        curl_setopt($process, CURLOPT_ENCODING , $this->compression);
+        curl_setopt($process, CURLOPT_TIMEOUT, 30);
+        curl_setopt($process, CURLOPT_POSTFIELDS, $data);
+        curl_setopt($process, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($process, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($process, CURLOPT_POST, 1);
+        $return = curl_exec($process);
+        curl_close($process);
+        return $return;
     }
 
-    /**
-     *
-     * 获取错误信息
-     * @return string
-     */
-    public function GetReturn_msg()
-    {
-        return $this->values['return_msg'];
-    }
 
-    /**
-     *
-     * 设置返回参数
-     * @param string $key
-     * @param string $value
-     */
-    public function SetData($key, $value)
-    {
-        $this->values[$key] = $value;
-    }
 }
