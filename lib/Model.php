@@ -9,10 +9,10 @@ namespace Hyperbolaa\Express\lib;
 
 class Model {
 
-    var $_CHECKHEADER = 'BSPdevelop';           //客户卡号,校验码
-    var $_CHECKBODY   = 'j8DzkIFgmlomPt0aLuwU'; //checkbody
-    //var $_URL         = 'https://bspoisp.sit.sf-express.com:11443/bsp-oisp/sfexpressService'; //快递类服务接口url
-    var $_URL         = 'http://bspoisp.sit.sf-express.com:11080/bsp-oisp/sfexpressService'; //快递类服务接口url
+    private $_CHECKHEADER = 'BSPdevelop';           //客户卡号,校验码
+    private $_CHECKBODY   = 'j8DzkIFgmlomPt0aLuwU'; //checkbody
+    //private $_URL         = 'https://bspoisp.sit.sf-express.com:11443/bsp-oisp/sfexpressService'; //快递类服务接口url
+    private $_URL         = 'http://bspoisp.sit.sf-express.com:11080/bsp-oisp/sfexpressService'; //快递类服务接口url
 
     /**
      * 下单服务
